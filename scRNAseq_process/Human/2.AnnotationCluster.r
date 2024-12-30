@@ -22,7 +22,7 @@ source('aPD1_Ery_scripts/scRNAseq_process/Human/stat.r')
 workpath <- "aPD1_Ery_scripts/scRNAseq_process/Human/"
 setwd(workpath)
 
-rdsfile <- str_c("./P3_t-SNE_30PCA_0.6Resolution/P3_t-SNE_30PCA_0.6Resolution.rds")
+rdsfile <- str_c("./P1_3_t-SNE_30PCA_0.6Resolution/P1_3_t-SNE_30PCA_0.6Resolution.rds")
 immune.combined <- readRDS(rdsfile)
 immune.combined$seurat_clusters <- Idents(immune.combined)
 p1 <- DimPlot(immune.combined, reduction = "tsne", label = TRUE, label.size = 5) + NoLegend() + theme_bw()
@@ -73,10 +73,10 @@ p1 <- DimPlot(immune.combined, reduction = "tsne",cols=brewer.pal(9,"Paired"), p
 ggsave('WholeCells_cellcycle.pdf', p1, width=4, height=3.5)
 ### 保存结果
 Idents(immune.combined) <- 'celltype'
-saveRDS(immune.combined, file = str_c("./P3_t-SNE_30PCA_0.6Resolution.AnnoManual.rds"))
+saveRDS(immune.combined, file = str_c("./P1_3_t-SNE_30PCA_0.6Resolution.AnnoManual.rds"))
 
 
 
-immune.combined <- readRDS(str_c("./P3_t-SNE_30PCA_0.6Resolution/P3_t-SNE_30PCA_0.6Resolution.AnnoManual.rds"))
+immune.combined <- readRDS(str_c("./P1_3_t-SNE_30PCA_0.6Resolution/P1_3_t-SNE_30PCA_0.6Resolution.AnnoManual.rds"))
 Idents(immune.combined) <- 'celltype'
 cellnumber_summary(immune.combined, names(table(immune.combined$sample_label)), total_celltype_levels, total_celltype_colors, 'immune.combined')

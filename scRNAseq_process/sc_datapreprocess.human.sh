@@ -16,14 +16,14 @@ rawdata_path='Data/CleanData/'
 sample="baseline C3D1"
 for s in $sample
 do
-cellranger multi --id=P3_${s} --csv=P3_${s}_multi-config-template.csv --localcores=40
+cellranger multi --id=P1_3_${s} --csv=P1_3_${s}_multi-config-template.csv --localcores=40
 done
 ### for single-cell RNA-seq and TCR-seq:
 # cellranger multi --id=D01_multi_result --csv=D01_multi-config-template.csv --localcores=40
 
 ### 2.quality control (single sample)
 R_script="Rscript/"
-sample="P3_baseline P3_C3D1"
+sample="P1_3_baseline P1_3_C3D1"
 rawdata_path='./'
 for s in $sample
 do
@@ -34,16 +34,16 @@ done
 
 ### 3.combined
 rawdata_path='./Human/'
-combined="P3"
+combined="P1_3"
 mkdir $combined
 cd $combined
-ln -s ../../2.cellanno/P3_baseline/*_raw.rds P3_baseline_raw.rds
-ln -s ../../2.cellanno/P3_C3D1/*_raw.rds P3_C3D1_raw.rds
+ln -s ../../2.cellanno/P1_3_baseline/*_raw.rds P1_3_baseline_raw.rds
+ln -s ../../2.cellanno/P1_3_C3D1/*_raw.rds P1_3_C3D1_raw.rds
 cd ..
 
 ### PBMC_10k: downloading from https://cf.10xgenomics.com/samples/cell-vdj/5.0.0/sc5p_v2_hs_PBMC_10k/
-sample_names="PBMC_10k,P3_baseline,P3_C3D1"
-rds_files="PBMC_10k_raw.rds,P3_baseline_raw.rds,P3_C3D1_raw.rds"
+sample_names="PBMC_10k,P1_3_baseline,P1_3_C3D1"
+rds_files="PBMC_10k_raw.rds,P1_3_baseline_raw.rds,P1_3_C3D1_raw.rds"
 filter_fea="6000,4000,5000"
 filter_mt="8,5,5"
 Rscript ${R_script}/2.IntegratedSamples.Seurat3_PCAselection.downsample10000.r -w ${rawdata_path}/3.combination/$combined -l $sample_names -f $rds_files -u $filter_fea -m $filter_mt -o ${combined} > ${rawdata_path}/3.combination/2.PCAselection.log

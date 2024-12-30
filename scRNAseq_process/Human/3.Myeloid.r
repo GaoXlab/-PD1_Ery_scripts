@@ -27,7 +27,7 @@ workpath <- "aPD1_Ery_scripts/scRNAseq_process/Human/"
 setwd(workpath)
 
 # 1. subset myeloid 
-immune.combined <- readRDS(str_c("./P3_t-SNE_30PCA_0.6Resolution/P3_t-SNE_30PCA_0.6Resolution.AnnoManual.rds"))
+immune.combined <- readRDS(str_c("./P1_3_t-SNE_30PCA_0.6Resolution/P1_3_t-SNE_30PCA_0.6Resolution.AnnoManual.rds"))
 Idents(immune.combined) <- immune.combined$celltype 
 DefaultAssay(immune.combined) <- "integrated"
 APC <- subset(immune.combined, idents=c('Monocyte','cDC','pDC'))
@@ -39,7 +39,7 @@ APC <- RunTSNE(APC, reduction = "pca", dims = 1:30)
 APC <- FindNeighbors(APC, reduction = "pca", dims = 1:30)
 APC <- FindClusters(APC, resolution = 0.5)
 p2 <- DimPlot(APC, reduction = "tsne", label = TRUE, repel = TRUE) + theme_bw()
-ggsave(str_c('./supFig.P3_Myeloid_SeuratClusters.',dtVar,'.pdf'), p2, width=5.5, height=4.5)
+ggsave(str_c('./supFig.P1_3_Myeloid_SeuratClusters.',dtVar,'.pdf'), p2, width=5.5, height=4.5)
 
 # 2. annotation 
 DefaultAssay(APC) <- "RNA"
@@ -47,7 +47,7 @@ Idents(APC) <- factor(APC$seurat_clusters, levels=c(12,10,8,4,14,11,7,5,13,3,6,2
 APCmajor_cluster <- c('IGKC','GZMB','JCHAIN','LILRA4','TCF4','IRF4','MZB1','XBP1','CD1C','FCER1A','CLEC9A','CST3','CD86','CD163','PPBP','PF4','MYL9','MARCO','CD3G','CD8A','TRDC','NKG7','KLRB1','ITGAM','ITGAX','FCGR3A','CD68', 'IFITM2','SIGLEC10','LILRB1','CX3CR1','CD14','FUT4','FCN1','VCAN','S100A8','S100A9','STAT1','NFKB1','CD63','MSR1', 'CFS1', 'CCL2', 'CCR2','TGFB1','TGFBR2','TGFBR1','TGFBR3','RSAD2','ISG15','IRF7','AIF1','APOE','HLA-DRA','CD74','CTSB','CTSD','FCGR2B','CEACAM8','CD274','NOS2','IL1B','TCL1A','CD79A','CD79B')
 p1 <- DotPlot(APC, features = APCmajor_cluster, col.min=-1, cols=c('white','red','red4'), dot.scale = 3) + RotatedAxis() +theme_bw()+
         theme(axis.text.x=element_text(angle = 90,  hjust = 1, vjust = .5)) 
-ggsave(str_c('./supFig.P3_Myeloid_SeuratClusters.dotplot.',dtVar,'.pdf'), p1, width=12.5, height=4.5)
+ggsave(str_c('./supFig.P1_3_Myeloid_SeuratClusters.dotplot.',dtVar,'.pdf'), p1, width=12.5, height=4.5)
 
 APC$celltype = dplyr::case_when(
   APC$seurat_clusters %in% c(9) ~ "B",
@@ -102,9 +102,9 @@ if(all(colnames(APC)==colnames(immune.combined$Phase[colnames(APC)]))){
   APC$G2M.Score = immune.combined$G2M.Score[colnames(APC)]
 }
 ### 保存结果
-saveRDS(APC, file = str_c("./P3_t-SNE_30PCA_0.6Resolution/P3_t-SNE_30PCA_0.6Resolution.Myeloid.AnnoManual.rds"))
+saveRDS(APC, file = str_c("./P1_3_t-SNE_30PCA_0.6Resolution/P1_3_t-SNE_30PCA_0.6Resolution.Myeloid.AnnoManual.rds"))
 
 
 ### 5. cell population summary
-APC <- readRDS(str_c("./P3_t-SNE_30PCA_0.6Resolution/P3_t-SNE_30PCA_0.6Resolution.Myeloid.AnnoManual.rds"))
+APC <- readRDS(str_c("./P1_3_t-SNE_30PCA_0.6Resolution/P1_3_t-SNE_30PCA_0.6Resolution.Myeloid.AnnoManual.rds"))
 cellnumber_summary(APC, names(table(APC$sample_label)), APC_celltype_levels, APC_celltype_colors, 'APC')
